@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // إضافة عناصر HTML الأساسية للزر والدردشة ديناميكيًا
     // هذا الجزء كان موجوداً كـ HTML صريح، سننقله إلى هنا ليتم إنشاؤه بواسطة JS
 
+    // modweeb-chat-init.js
+
+    // --- 1. إنشاء عناصر HTML الأساسية (الزر والحاوية)
     const chatButtonHtml = `
         <button id="modweeb-chat-btn" type="button" class="modweeb-chat-btn" aria-label="فتح الدردشة" title="ابدأ دردشة AI">
             <svg class="modweeb-svg-btn-n" viewBox="0 0 24 24">
@@ -24,7 +27,6 @@ document.addEventListener("DOMContentLoaded", function() {
             </svg>
         </button>
     `;
-
     const chatWidgetHtml = `
         <div id="modweeb-widget-container">
             <div id="modweeb-chat-container" role="dialog" aria-label="دردشة الذكاء الاصطناعي">
@@ -86,12 +88,31 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     `;
 
-    // إلحاق زر الدردشة ومحتوى الدردشة إلى جسم المستند
     document.body.insertAdjacentHTML('beforeend', chatButtonHtml);
     document.body.insertAdjacentHTML('beforeend', chatWidgetHtml);
-});
 
-// ملاحظة: دالة modweebChat غير موجودة حاليا في modweeb-chat.js
-// ولكن تم تحديث initializeChatWidget لتكون الدالة الرئيسية لتشغيل الأداة
-// لذا لا نحتاج إلى استدعاء modweebChat() بعد تحميل السكربت.
-// بدلاً من ذلك، سيتم استدعاء initializeChatWidget() مباشرة.
+    // --- 2. تحميل ملف CSS
+    const cssLink = document.createElement("link");
+    cssLink.rel = "stylesheet";
+    cssLink.href = "https://cdn.jsdelivr.net/gh/modweeb/Gamma@main/modweeb-chat.css";
+    document.head.appendChild(cssLink);
+
+    // --- 3. تحميل ملف JavaScript الرئيسي
+    const chatScript = document.createElement("script");
+    chatScript.src = "https://cdn.jsdelivr.net/gh/modweeb/Gamma@main/modweeb-chat.js";
+    chatScript.defer = true; // لضمان التنفيذ بعد تحليل HTML
+
+    // عند الانتهاء من تحميل السكربت الرئيسي، قم باستدعاء دالة التهيئة
+    chatScript.onload = function() {
+        if (typeof window.modweebInitializeChat === 'function') {
+            window.modweebInitializeChat(); // استدعاء دالة التهيئة من modweeb-chat.js
+        } else {
+            console.error("Modweeb Chat Widget: initializeChatWidget function not found after script load.");
+        }
+    };
+    chatScript.onerror = function() {
+        console.error("Modweeb Chat Widget: Failed to load modweeb-chat.js");
+    };
+
+    document.body.appendChild(chatScript);
+});
