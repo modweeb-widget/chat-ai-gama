@@ -398,5 +398,9 @@ function initializeChatWidget() {
     });
 } // <--- هذه هي نهاية دالة initializeChatWidget الصحيحة
 
-// استدعاء دالة التهيئة عند تحميل DOM بالكامل
-document.addEventListener("DOMContentLoaded", initializeChatWidget);
+// modweeb-chat.js (في نهاية الملف، بعد تعريف الدالة)
+// ... بقية كود initializeChatWidget ...
+// نهاية initializeChatWidget
+
+// اجعل الدالة متاحة عالميًا ليتم استدعاؤها من ملف init.js
+window.modweebInitializeChat = initializeChatWidget;
